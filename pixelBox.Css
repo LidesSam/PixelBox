@@ -1,0 +1,38 @@
+*{
+  
+    background-color: black;
+    color: white;
+}
+
+main{
+    min-height:100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+}
+pixelbox{
+    min-height: 80vh;
+    min-width: 80vh;
+    box-sizing: border-box;
+    border: green 4px solid;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+   
+}
+pixelbox nav{
+    height: 4vh;
+    width: 100%;
+    background-color: green;
+}
+
+#drawArea{
+    box-sizing: border-box;
+    border: 10px solid gray;
+    height: 80%;
+    aspect-ratio: 1/1;
+    display: block;
+
+    background-color: white;
+}
