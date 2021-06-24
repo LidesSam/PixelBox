@@ -11,6 +11,7 @@ main{
     align-items: center;
     justify-items: center;
 }
+
 pixelbox{
     min-height: 80vh;
     min-width: 80vh;
@@ -29,7 +30,7 @@ pixelbox nav{
 
 #drawArea{
     box-sizing: border-box;
-    border: 10px solid gray;
+    border: 10px solid brown;
     height: 80%;
     aspect-ratio: 1/1;
     display: block;
