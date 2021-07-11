@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html onreset="reloadWarning()">
+
+</html>
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>PixelBox</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="../css/pixelboxStyle.css" />
+
+</head>
+
+<body>
+    <div>
+        version Monocrome 0.2
+    </div>
+
+    <main>
+        <div class="panel">
+            <div>
+
+                <h3>
+                    <a target="blank" href="https://santiagoarrieta.000webhostapp.com">Developer: Santiago Ariel Arrieta
+                    </a>
+
+                </h3>
+                <a target="blank" href="https://santiagoarrieta.000webhostapp.com/showcase.html">More</a>
+            </div>
+        </div>
+
+        <pixelbox id="pixelbox">
+            <nav>
+
+                <button onclick=NewCanvas()>
+                    new
+                </button>
+
+                <button onclick=saveAsImage()>
+                    save
+                </button>
+
+
+
+
+            </nav>
+            <nav id="toolbox">
+                <button onclick=setToolPen()>
+                    pen
+                </button>
+
+                <button onclick=setToolEraser()>
+                    eraser
+                </button>
+                <button onclick=setToolEraser() disabled=true style="display: none;">
+                    line
+                </button>
+                Current Tool: <span id="currentTool">"pen"</span>
+
+            </nav>
+            <div id="canvasCont"
+                style="background-color:transparent; min-width:fit-content;max-width:fit-content;min-height:fit-content;max-height:fit-content; position: relative;">
+                <canvas id="myCanvas" width="800px" height="800px">
+
+                </canvas>
+            </div>
+
+        </pixelbox>
+
+        <div class="panel">
+            <button onclick="updateMiniCanvas()">Preview:</button>
+            <div id="miniCanvasCont"
+                style="background-color:transparent; min-width:fit-content;max-width:fit-content;min-height:fit-content;max-height:fit-content; position: relative;">
+                <canvas id="miniCanvas" width="16px" height="16px">
+
+                </canvas>
+            </div>
+            pixelart name
+            <textarea name="" id="imgname" cols="30" rows="1">my-pixelart</textarea>
+            <div>
+                mx:<span id="mousex">0</span> /16 my: <span id="mousey">0</span>/16
+            </div>
+
+    </main>
+    </main>
+</body>
+
+<script src="../javascript\DrawBoard.js">
+    function reloadWarning() {
+        if (confirm('Successful Message')) {
+            window.location.reload();
+        }
+    }
+</script>
+
+</html>

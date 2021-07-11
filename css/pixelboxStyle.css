@@ -1,32 +1,62 @@
-*{
-  
-    background-color: black;
+* { padding: 0; margin: 0; 
+
+   
+    background-color: inherit;
+    color: inherit;
+}
+html, body {
+    min-height: 100% !important;
+    height: 100%;
+    padding: 0;
+    margin: 0; 
+    overflow: hidden;
+}
+
+
+body{
+
+    background-color:#332222;
     color: white;
 }
 
+
 main{
+    background-color: inherit;
     min-height:100%;
     width: 100%;
-    display: flex;
+
+    display: grid;
+    grid-template-columns: 25vw 50vw 25vw;
     align-items: center;
-    justify-items: center;
+    justify-content: center;
+    background-color: transparent;
+    
 }
 
 pixelbox{
-    min-height: 80vh;
-    min-width: 80vh;
     box-sizing: border-box;
-    border: green 4px solid;
+    /*border: green 4px solid;*/
     display: flex;
     flex-direction: column;
-    justify-items: center;
-   
+    justify-content: center;
+    align-items: center;
+    background-color: orange;
+    overflow: hidden;
 }
+
 pixelbox nav{
+    box-sizing: border-box;
+    padding: 4px;
     height: 4vh;
     width: 100%;
-    background-color: green;
+    max-width: 100%;
+    background-color: orangered;
 }
+pixelbox nav button{
+    background-color: gray;
+}
+
+
 
 #drawArea{
     box-sizing: border-box;
@@ -36,4 +66,34 @@ pixelbox nav{
     display: block;
 
     background-color: white;
+}
+
+.shadowMarker{
+    position:absolute;
+   top:0%;
+   left:0%;
+    height:35px;
+    width:35px;
+    box-sizing: border-box;
+    background-color: rgba(48, 53, 78, 0.212);
+    /*border:2px solid red;*/
+}
+.panel{
+box-sizing: border-box;
+border: #332222 solid 2px;
+    background-color: darkslategray;
+    color:whitesmoke;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    
+    box-sizing: border-box;
+    border: black 1px solid;
+    
+    min-height: 90%;
+    margin: 5px;
+    
 }
