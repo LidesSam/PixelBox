@@ -9,13 +9,13 @@
 
     <title>PixelBox</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="../css/pixelboxStyle.css" />
+    <link rel="stylesheet" type="text/css" href="./css/pixelboxStyle.css" />
 
 </head>
 
 <body>
     <div>
-        version Monocrome 0.2
+        version Monocrome 0.3
     </div>
 
     <main>
@@ -47,13 +47,19 @@
 
             </nav>
             <nav id="toolbox">
-                <button onclick=setToolPen()>
+                <button onclick= "setTool('pen');"}>
                     pen
                 </button>
 
                 <button onclick=setToolEraser()>
                     eraser
                 </button>
+                
+                <button onclick="setTool('bucket');"}>
+                    fill
+                </button>
+                
+
                 <button onclick=setToolEraser() disabled=true style="display: none;">
                     line
                 </button>
@@ -82,12 +88,13 @@
             <div>
                 mx:<span id="mousex">0</span> /16 my: <span id="mousey">0</span>/16
             </div>
+        </div>
 
-    </main>
+
     </main>
 </body>
 
-<script src="../javascript\DrawBoard.js">
+<script src="./javascript\DrawBoard.js">
     function reloadWarning() {
         if (confirm('Successful Message')) {
             window.location.reload();

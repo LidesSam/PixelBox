@@ -1,3 +1,7 @@
+var color = "#000000"
+var secColor= "#ffffff"
+
+
 var defSize = 16
 
 var miniCanvas = document.getElementById("miniCanvas");
@@ -84,7 +88,8 @@ function ClearCanvas(){
         drawMatrix.push(line)
     }
 
-    setToolPen()
+    //setToolPen()
+   // setTool("pen")
 }
 
 
@@ -114,6 +119,25 @@ function DrawPixel(posx, posy,bsize){
     
 }
 
+function setTool(choosedTool){
+    //alert("chosse.;",choosedTool)
+    tool= choosedTool
+    switch(tool){
+        case "pen":
+            setToolPen()
+            break;
+        case "bucket":
+            setToolEraser()
+            break;
+        case "fill":
+            canvasContext.fillStyle = "black";
+            break;
+        default:
+            setToolPen()
+            break;
+    }
+    setToolText()
+}
 
 function setToolPen(){
     //provitional
@@ -123,6 +147,7 @@ function setToolPen(){
 }
 
 function setToolEraser(){
+    //alert("setToll erarese")
     tool="eraser"
     //provitional // only until new tools being added
     canvasContext.fillStyle = "white";
@@ -140,6 +165,7 @@ function setToolText(){
 var container = document.getElementsByClassName('container')[0];
 document.addEventListener('click', function( event ) {
   DrawPixelInMosusePos(event)
+  updateMiniCanvas()
 });
 
 function DrawPixelInMosusePos(event){
@@ -246,4 +272,19 @@ function updateMiniCanvas(){
     }
    //alert("updatedx");
   
+}
+
+
+function resizeCanvas(size){
+    
+}
+
+function bucket(px=0, py=0){
+
+
+}
+
+function colorSwap(){
+   
+
 }
