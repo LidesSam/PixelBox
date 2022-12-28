@@ -2,7 +2,9 @@ var color = "#000000"
 var secColor= "#ffffff"
 
 
-var defSize = 16
+
+var canvasWidth = 16
+var canvasHeight = 16
 
 var miniCanvas = document.getElementById("miniCanvas");
 var miniCanvasContext = miniCanvas.getContext("2d");
@@ -21,9 +23,9 @@ var drawMatrix = [];
 
 
 
-for(var i=0; i<16;i++){
+for(var i=0; i<canvasWidth;i++){
     var line = [];
-    for(var j=0; j<16;j++){
+    for(var j=0; j<canvasHeight;j++){
         line.push(0);
     }
     drawMatrix.push(line)
@@ -128,6 +130,11 @@ function setTool(choosedTool){
             tool="pen"
             canvasContext.fillStyle = "black";
             break;
+        case "mirror_pen":
+            tool="mirror_pen"
+            canvasContext.fillStyle = "grey";
+            break;
+
         case "bucket":
             tool="bucket"
             canvasContext.fillStyle = "blue";
@@ -165,10 +172,7 @@ document.addEventListener('click', function( event ) {
   updateMiniCanvas()
 });
 
-function DrawPixelInMosusePos(event){
-
-   // if (canvas == event.target && canvas.contains(event.target)) {    
-    
+function DrawPixelInMosusePos(event,mirror=false){
     //calculatemouse position on 
         var mPos= getMousePos(canvas,event)
         
@@ -176,8 +180,15 @@ function DrawPixelInMosusePos(event){
         var tpy=Math.floor(mPos.y/blockSize)
 
         updateMousePos(mPos)
-        
         DrawPixel(tpx,tpy,blockSize)
+            
+        if(mirror){
+            console.log(canvasWidth-tpx)
+            DrawPixel(canvasWidth-tpx-1,tpy,blockSize);
+            //
+        }
+
+        
     //}
 }
 
@@ -190,13 +201,29 @@ addEventListener("mouseup", function(event ){
 });
 
 addEventListener("mousemove",function(event){
-    if(mousedIsDown){
-        DrawPixelInMosusePos(event)
-    }else{
-        var mPos= getMousePos(canvas,event)
-        updateMousePos(mPos)
-    }
+    switch(tool){
+        case "eraser":
+        case "pen":
+            if(mousedIsDown){
+                
+                DrawPixelInMosusePos(event)
+            }
+            else{
+                var mPos= getMousePos(canvas,event)
+                updateMousePos(mPos)
+            }
+            break;
 
+        case "mirror_pen":
+            if(mousedIsDown){
+                DrawPixelInMosusePos(event,true)
+            }
+            else{
+                var mPos= getMousePos(canvas,event)
+                updateMousePos(mPos)
+            }
+            break
+        }
     
 })
 function updateMousePos(mPos){
@@ -225,6 +252,7 @@ function getMousePos(_canvas, evt) {
       x: evt.clientX - rect.left,
       y: evt.clientY - rect.top
     };
+
 }
 
 function GridFixer(){
