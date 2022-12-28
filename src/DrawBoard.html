@@ -41,7 +41,16 @@
                 <button onclick=saveAsImage()>
                     save
                 </button>
-
+                <button onclick=saveAsImage()>
+                    open
+                </button>
+                <button onclick=saveAsImage()>
+                    <--
+                </button>
+                
+                <button onclick=saveAsImage()>
+                    -->
+                </button>
 
 
 
@@ -60,8 +69,17 @@
                 </button>
                 
 
-                <button onclick=setToolEraser() disabled=true style="display: none;">
+                <button onclick="setTool('line');" disabled=true style="display: none;">
                     line
+                </button>
+
+                
+                <button onclick="setTool('circle');" disabled=true style="display: none;">
+                    circle
+                </button>
+                
+                <button onclick="setTool('rectangle');" disabled=true style="display: none;">
+                    rectangle
                 </button>
                 Current Tool: <span id="currentTool">"pen"</span>
 

@@ -20,6 +20,7 @@ var tool="pen"
 var drawMatrix = [];
 
 
+
 for(var i=0; i<16;i++){
     var line = [];
     for(var j=0; j<16;j++){
@@ -124,10 +125,12 @@ function setTool(choosedTool){
     tool= choosedTool
     switch(tool){
         case "pen":
-            setToolPen()
+            tool="pen"
+            canvasContext.fillStyle = "black";
             break;
         case "bucket":
-            setToolEraser()
+            tool="bucket"
+            canvasContext.fillStyle = "blue";
             break;
         case "fill":
             canvasContext.fillStyle = "black";
@@ -139,12 +142,6 @@ function setTool(choosedTool){
     setToolText()
 }
 
-function setToolPen(){
-    //provitional
-    tool="pen"
-    canvasContext.fillStyle = "black";
-    setToolText()
-}
 
 function setToolEraser(){
     //alert("setToll erarese")
@@ -236,7 +233,7 @@ function GridFixer(){
 
 
 function saveAsImage(){
- updateMiniCanvas()
+    updateMiniCanvas()
 
   let factorMultiplier=1
   let image = miniCanvas.toDataURL("image/png", factorMultiplier).replace("image/png", "image/octet-stream");
@@ -280,8 +277,22 @@ function resizeCanvas(size){
 }
 
 function bucket(px=0, py=0){
+    console.log("bucket in x:"+px+"py"+py);
+    var toPaintList=[];
+    
+    
+    toPaintList.push({x:px,y:py});
+
+    var cval = drawMatrix[px][py]
+
+    checkAround(px,py,toPaintList)
+    
+}
 
 
+
+function GetIfSameColor(px=0, py=0){
+    
 }
 
 function colorSwap(){
