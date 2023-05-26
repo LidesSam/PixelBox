@@ -104,16 +104,15 @@ function DrawPixel(posx, posy,bsize){
     var px = posx*bsize
     var py = posy*bsize
     var pline =drawMatrix[posx]
-   
-
-    if(this.tool =="pen"){
-        pline[posy]=1
-    }
 
     if(this.tool =="eraser"){
         
         pline[posy]=0
         
+    }
+    else
+    {
+        pline[posy]=1
     }
     
     
@@ -172,6 +171,11 @@ document.addEventListener('click', function( event ) {
   updateMiniCanvas()
 });
 
+
+canvas.addEventListener('click', function(event) {
+   DrawPixelInMosusePos(event);
+   updateMiniCanvas();
+});
 function DrawPixelInMosusePos(event,mirror=false){
     //calculatemouse position on 
         var mPos= getMousePos(canvas,event)
@@ -180,14 +184,26 @@ function DrawPixelInMosusePos(event,mirror=false){
         var tpy=Math.floor(mPos.y/blockSize)
 
         updateMousePos(mPos)
-        DrawPixel(tpx,tpy,blockSize)
+        console.log(tool);
+        switch (tool){
+            case "bucket":
+                
+                bucket(tpx,tpy);
+            break;
+            default:
+                DrawPixel(tpx,tpy,blockSize)
             
-        if(mirror){
-            console.log(canvasWidth-tpx)
-            DrawPixel(canvasWidth-tpx-1,tpy,blockSize);
-            //
+                if(mirror){
+                    console.log(canvasWidth-tpx)
+                    DrawPixel(canvasWidth-tpx-1,tpy,blockSize);
+                    updateMiniCanvas()
+                    //
+        }
+               break;
         }
 
+        
+       
         
     //}
 }
@@ -259,15 +275,15 @@ function GridFixer(){
 
 }
 
-
 function saveAsImage(){
     updateMiniCanvas()
 
-  let factorMultiplier=1
-  let image = miniCanvas.toDataURL("image/png", factorMultiplier).replace("image/png", "image/octet-stream");
-  let link = document.createElement('a');
-  let format=".png"
-  let name=document.getElementById("imgname").textContent.toString()+format
+    let factorMultiplier=1
+    let image = miniCanvas.toDataURL("image/png", factorMultiplier).replace("image/png", "image/octet-stream");
+    let link = document.createElement('a');
+    let format=".png"
+    console.log(document.getElementById("imgname").textContent.toString())
+    let name=document.getElementById("imgname").textContent.toString()+format
 
   
   link.download = name;
@@ -308,15 +324,78 @@ function bucket(px=0, py=0){
     console.log("bucket in x:"+px+"py"+py);
     var toPaintList=[];
     
-    
     toPaintList.push({x:px,y:py});
 
-    var cval = drawMatrix[px][py]
-
-    checkAround(px,py,toPaintList)
+   // var cval = drawMatrix[px][py]
+    toPaintList = checkAround(px,py,toPaintList)
+    for(i=0;i<toPaintList.length;i++){
+        DrawPixel(toPaintList[i].x,toPaintList[i].y,blockSize);
+    }
     
 }
 
+function checkAround(px,py,toPaintList){
+    console.log("x:"+px+"-y:"+py)
+    if(px>0){
+        if(drawMatrix[px-1][py]==0){
+            let npos={
+                x:(px-1),
+                y:py
+            };
+            toPaintList.push(npos);
+            toPaintList= checkAround(npos.x,npos.y,toPaintList)
+        }
+        
+    }
+
+    if(px<canvasWidth-1){
+        if(drawMatrix[px+1][py]==0){
+            let npos={
+                x:(px+1),
+                y:py
+            };
+
+            toPaintList.push(npos);
+            toPaintList= checkAround(npos.x,npos.y,toPaintList)
+        }
+        
+    }
+    
+
+    return toPaintList;
+   
+    
+
+}
+
+function checkLineHFrom(line){
+    console.log("y"+py)
+    if(px>0){
+        if(drawMatrix[px-1][py]==0){
+            let npos={
+                x:(px-1),
+                y:py
+            };
+
+            toPaintList.push(npos);
+            toPaintList= checkLineHFrom(npos.x,npos.y,toPaintList)
+        }
+        
+    }
+
+    if(px<canvasWidth-1){
+        if(drawMatrix[px+1][py]==0){
+            let npos={
+                x:(px+1),
+                y:py
+            };
+
+            toPaintList.push(npos);
+            toPaintList= checkLineHFrom(npos.x,npos.y,toPaintList)
+        }
+        
+    }
+}
 
 
 function GetIfSameColor(px=0, py=0){

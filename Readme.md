@@ -1,7 +1,16 @@
 Pixelbox
 Online Pixel Art Editor
 
+
+
 versions
+Monocrome 0.3
+
+bucket tool added
+mirror tool added
+
+
+
 Monocrome 0.2
 better look -> centered canvas
 
