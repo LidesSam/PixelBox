@@ -10,6 +10,8 @@
     <title>PixelBox</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="stylesheet" type="text/css" href="./css/pixelboxStyle.css" />
+    <!-- Font Awesome CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
 </head>
 
@@ -33,40 +35,31 @@
 
         <pixelbox id="pixelbox">
             <nav>
-
-                <button onclick=NewCanvas()>
-                    new
-                </button>
-
-                <button onclick=saveAsImage()>
-                    save
-                </button>
-                <button onclick=saveAsImage()>
-                    open
-                </button>
-                <button onclick=saveAsImage()>
-                    <--
+                <button onclick="NewCanvas()">
+                    <i class="fas fa-plus"></i> <!-- Icon for "new" -->
                 </button>
                 
-                <button onclick=saveAsImage()>
-                    -->
+                <button onclick="saveAsImage()">
+                    <i class="fas fa-save"></i> <!-- Icon for "save" -->
                 </button>
-
-
-
+                
+                <button onclick="">
+                    <i class="fas fa-folder-open"></i> <!-- Icon for "open" -->
+                </button>
             </nav>
             <nav id="toolbox">
-                <button onclick= "setTool('pen');">
-                    pen
+                <button onclick="setTool('pen');">
+                    <i class="fas fa-pencil-alt"></i> <!-- Icon for "pen" -->
                 </button>
-
+                
                 <button onclick="setTool('eraser');">
-                    eraser
+                    <i class="fas fa-eraser"></i> <!-- Icon for "eraser" -->
                 </button>
-
-                <button onclick= "setTool('mirror_pen');">
-                    mirror
+                
+                <button onclick="setTool('mirror_pen');">
+                    <i class="fas fa-arrows-alt-h"></i> <!-- Icon for "mirror" -->
                 </button>
+                
 
                 Current Tool: <span id="currentTool">"pen"</span>
 
