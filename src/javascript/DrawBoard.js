@@ -21,8 +21,6 @@ var  mousedIsDown=false
 var tool="pen"
 var drawMatrix = [];
 
-
-
 for(var i=0; i<canvasWidth;i++){
     var line = [];
     for(var j=0; j<canvasHeight;j++){
@@ -33,11 +31,9 @@ for(var i=0; i<canvasWidth;i++){
 
 canvasContext.fillStyle = "black";//procitional ultil more tool are avaible(it gonna become obsolete)
 
-//alert(blockSize)
 ClearCanvas()
 createMouseShadow()
-//DrawPixel(2,0,blockSize)
-
+NewCanvas()
 
 function createMouseShadow(){
     mouseShadow = document.createElement("div")
@@ -51,6 +47,7 @@ function createMouseShadow(){
 
     
 }
+
 function updateMouseShadowPosition(px,py){
    let percentx =px/16*100
    let percenty =py/16*100
@@ -62,9 +59,8 @@ function updateMouseShadowPosition(px,py){
 
    mouseShadow.style.left=percentx.toString()+"%"
    mouseShadow.style.top=percenty.toString()+"%"
-  // mouseShadow.style.top=((py*16)/canvas.height*100).toString()+"%"
+   // mouseShadow.style.top=((py*16)/canvas.height*100).toString()+"%"
 }
-
 
 function NewCanvas(){
     if(confirm("changes can't be recovered you really want a new Canvas?")){
@@ -78,11 +74,7 @@ function ClearCanvas(){
     canvasContext.fillRect(0, 0, canvas.width, canvas.height);
     miniCanvasContext.fillStyle="white"
     miniCanvasContext.fillRect(0,0,miniCanvas.width,miniCanvas.height);
-
-
-   drawMatrix = [];
-
-
+    drawMatrix = [];
     for(var i=0; i<16;i++){
         var line = [];
         for(var j=0; j<16;j++){
@@ -90,11 +82,7 @@ function ClearCanvas(){
         }
         drawMatrix.push(line)
     }
-
-    //setToolPen()
-   // setTool("pen")
 }
-
 
 function DrawPixel(posx, posy,bsize){
     var c = document.getElementById("myCanvas");
@@ -106,9 +94,7 @@ function DrawPixel(posx, posy,bsize){
     var pline =drawMatrix[posx]
 
     if(this.tool =="eraser"){
-        
         pline[posy]=0
-        
     }
     else
     {
@@ -133,36 +119,18 @@ function setTool(choosedTool){
             tool="mirror_pen"
             canvasContext.fillStyle = "grey";
             break;
-
-        case "bucket":
-            tool="bucket"
-            canvasContext.fillStyle = "blue";
-            break;
-        case "fill":
-            canvasContext.fillStyle = "black";
+        case "eraser":
+            tool="eraser"
+            canvasContext.fillStyle = "white";
             break;
         default:
             setToolPen()
             break;
     }
-    setToolText()
-}
-
-
-function setToolEraser(){
-    //alert("setToll erarese")
-    tool="eraser"
-    //provitional // only until new tools being added
-    canvasContext.fillStyle = "white";
-    setToolText()
-}
-
-function setToolText(){
+    //set tool text
     var label = document.getElementById("currentTool");
     label.textContent=tool;
 }
-
-
 
 // draw click
 var container = document.getElementsByClassName('container')[0];
@@ -171,11 +139,11 @@ document.addEventListener('click', function( event ) {
   updateMiniCanvas()
 });
 
-
 canvas.addEventListener('click', function(event) {
    DrawPixelInMosusePos(event);
    updateMiniCanvas();
 });
+
 function DrawPixelInMosusePos(event,mirror=false){
     //calculatemouse position on 
         var mPos= getMousePos(canvas,event)
@@ -271,10 +239,6 @@ function getMousePos(_canvas, evt) {
 
 }
 
-function GridFixer(){
-
-}
-
 function saveAsImage(){
     updateMiniCanvas()
 
@@ -313,96 +277,4 @@ function updateMiniCanvas(){
     }
    //alert("updatedx");
   
-}
-
-
-function resizeCanvas(size){
-    
-}
-
-function bucket(px=0, py=0){
-    console.log("bucket in x:"+px+"py"+py);
-    var toPaintList=[];
-    
-    toPaintList.push({x:px,y:py});
-
-   // var cval = drawMatrix[px][py]
-    toPaintList = checkAround(px,py,toPaintList)
-    for(i=0;i<toPaintList.length;i++){
-        DrawPixel(toPaintList[i].x,toPaintList[i].y,blockSize);
-    }
-    
-}
-
-function checkAround(px,py,toPaintList){
-    console.log("x:"+px+"-y:"+py)
-    if(px>0){
-        if(drawMatrix[px-1][py]==0){
-            let npos={
-                x:(px-1),
-                y:py
-            };
-            toPaintList.push(npos);
-            toPaintList= checkAround(npos.x,npos.y,toPaintList)
-        }
-        
-    }
-
-    if(px<canvasWidth-1){
-        if(drawMatrix[px+1][py]==0){
-            let npos={
-                x:(px+1),
-                y:py
-            };
-
-            toPaintList.push(npos);
-            toPaintList= checkAround(npos.x,npos.y,toPaintList)
-        }
-        
-    }
-    
-
-    return toPaintList;
-   
-    
-
-}
-
-function checkLineHFrom(line){
-    console.log("y"+py)
-    if(px>0){
-        if(drawMatrix[px-1][py]==0){
-            let npos={
-                x:(px-1),
-                y:py
-            };
-
-            toPaintList.push(npos);
-            toPaintList= checkLineHFrom(npos.x,npos.y,toPaintList)
-        }
-        
-    }
-
-    if(px<canvasWidth-1){
-        if(drawMatrix[px+1][py]==0){
-            let npos={
-                x:(px+1),
-                y:py
-            };
-
-            toPaintList.push(npos);
-            toPaintList= checkLineHFrom(npos.x,npos.y,toPaintList)
-        }
-        
-    }
-}
-
-
-function GetIfSameColor(px=0, py=0){
-    
-}
-
-function colorSwap(){
-   
-
 }
