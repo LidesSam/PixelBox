@@ -1,31 +1,19 @@
 <!DOCTYPE html>
-<html onreset="reloadWarning()">
-
-</html>
-
+<html lang="en">
 <head>
-
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
     <title>PixelBox</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="stylesheet" type="text/css" href="./css/pixelboxStyle.css" />
-
 </head>
-
 <body>
-    <div>
-        version Monocrome 0.3
-    </div>
+    <div>version Monocrome 0.3</div>
 
     <main>
         <div class="panel">
             <div>
-
                 <h3>
-                    <a target="blank" href="https://santiagoarrieta.000webhostapp.com">Developer: Santiago Ariel Arrieta
-                    </a>
-
+                    <a target="blank" href="https://santiagoarrieta.000webhostapp.com">Developer: Santiago Ariel Arrieta</a>
                 </h3>
                 <a target="blank" href="https://santiagoarrieta.000webhostapp.com/showcase.html">More</a>
             </div>
@@ -33,113 +21,221 @@
 
         <pixelbox id="pixelbox">
             <nav>
-
-                <button onclick=NewCanvas()>
-                    new
-                </button>
-
-                <button onclick=saveAsImage()>
-                    save
-                </button>
-                <button onclick=saveAsImage()>
-                    open
-                </button>
-                <button onclick=saveAsImage()>
-                    <--
-                </button>
-                
-                <button onclick=saveAsImage()>
-                    -->
-                </button>
-
-
-
+                <button onclick="newCanvas()">New</button>
+                <button onclick="saveAsImage()">Save</button>
+                <button onclick="openCanvas()">Open</button>
+                <button onclick="navigateLeft()">←</button>
+                <button onclick="navigateRight()">→</button>
             </nav>
+
             <nav id="toolbox">
-                <button onclick= "setTool('pen');"}>
-                    pen
-                </button>
-
-                <button onclick=setToolEraser()>
-                    eraser
-                </button>
-
-                <button onclick= "setTool('mirror_pen');">
-                    mirror
-                </button>
-
-                <button onclick= "setTool('pattern_pen');" style="display:none">
-                    pattern_pen
-                </button>
-
-                <button onclick="setTool('select_rect');">
-                    select
-                </button>
-                
-                <button onclick="setTool('select_wand');" style="display:none">
-                    wand
-                </button>
-
-                <button onclick="setTool('bucket');">
-                    bucket
-                </button>
-
-               
-                
-
-                <button onclick="setTool('line');" disabled=true">
-                    line
-                </button>
-
-                
-                <button onclick="setTool('circle');" disabled=true style="display: none;">
-                    circle
-                </button>
-                
-                <button onclick="setTool('rectangle');" disabled=true style="display: none;">
-                    rectangle
-                </button>
-                Current Tool: <span id="currentTool">"pen"</span>
-
+                <button onclick="setTool('pen')">Pen</button>
+                <button onclick="setTool('eraser')">Eraser</button>
+                <button onclick="setTool('mirror_pen')">Mirror Pen</button>
+                <button onclick="setTool('bucket')">Bucket</button>
+                Current Tool: <span id="currentTool">Pen</span>
             </nav>
-            <div id="canvasCont"
-                style="background-color:transparent; min-width:fit-content;max-width:fit-content;min-height:fit-content;max-height:fit-content; position: relative;">
-                <canvas id="myCanvas" width="800px" height="800px">
 
-                </canvas>
+            <div id="canvasCont" style="background-color:transparent; min-width:fit-content;max-width:fit-content;min-height:fit-content;max-height:fit-content; position: relative;">
+                <canvas id="myCanvas" width="800px" height="800px"></canvas>
             </div>
 
         </pixelbox>
 
         <div class="panel">
             <button onclick="updateMiniCanvas()">Preview:</button>
-            <div id="miniCanvasCont"
-                style="background-color:transparent; min-width:fit-content;max-width:fit-content;min-height:fit-content;max-height:fit-content; position: relative;">
-                <canvas id="miniCanvas" width="16px" height="16px">
-
-                </canvas>
+            <div id="miniCanvasCont" style="background-color:transparent; min-width:fit-content;max-width:fit-content;min-height:fit-content;max-height:fit-content; position: relative;">
+                <canvas id="miniCanvas" width="16px" height="16px"></canvas>
             </div>
-            pixelart name
+            Pixelart Name:
+            <textarea name="" id="imgname" cols="30" rows="1"></textarea>
 
-            <textarea name="" id="imgname" cols="30" rows="1">
-                
-            </textarea>
-            
             <div>
                 mx:<span id="mousex">0</span> /16 my: <span id="mousey">0</span>/16
             </div>
         </div>
-
-
     </main>
-</body>
 
-<script src="./javascript\DrawBoard.js">
-    function reloadWarning() {
-        if (confirm('Successful Message')) {
-            window.location.reload();
+    <script src="./javascript/DrawBoard.js"></script>
+
+    <script>
+        // Canvas Object
+        class Canvas {
+            constructor(canvasId, miniCanvasId, canvasWidth = 16, canvasHeight = 16) {
+                this.canvas = document.getElementById(canvasId);
+                this.miniCanvas = document.getElementById(miniCanvasId);
+                this.canvasContext = this.canvas.getContext("2d");
+                this.miniCanvasContext = this.miniCanvas.getContext("2d");
+                
+                this.canvasWidth = canvasWidth;
+                this.canvasHeight = canvasHeight;
+                this.blockSize = this.canvas.width / this.canvasWidth;
+                this.drawMatrix = Array(this.canvasWidth).fill().map(() => Array(this.canvasHeight).fill(0));
+
+                this.clearCanvas();
+            }
+
+            clearCanvas() {
+                this.canvasContext.fillStyle = "white";
+                this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                this.miniCanvasContext.fillStyle = "white";
+                this.miniCanvasContext.fillRect(0, 0, this.miniCanvas.width, this.miniCanvas.height);
+
+                this.drawMatrix = Array(this.canvasWidth).fill().map(() => Array(this.canvasHeight).fill(0));
+            }
+
+            drawPixel(posx, posy, color = "black") {
+                const px = posx * this.blockSize;
+                const py = posy * this.blockSize;
+                this.canvasContext.fillStyle = color;
+                this.canvasContext.fillRect(px, py, this.blockSize, this.blockSize);
+            }
+
+            updateMiniCanvas() {
+                this.miniCanvasContext.fillStyle = "white";
+                this.miniCanvasContext.fillRect(0, 0, this.miniCanvas.width, this.miniCanvas.height);
+
+                this.miniCanvasContext.fillStyle = "black";
+                for (let i = 0; i < this.drawMatrix.length; i++) {
+                    for (let j = 0; j < this.drawMatrix[i].length; j++) {
+                        if (this.drawMatrix[i][j] === 1) {
+                            this.miniCanvasContext.fillRect(i, j, 1, 1);
+                        }
+                    }
+                }
+            }
         }
-    }
-</script>
 
+        // Tool Object
+        class Tool {
+            constructor() {
+                this.currentTool = "pen";
+                this.canvasContext = document.getElementById("myCanvas").getContext("2d");
+            }
+
+            setTool(toolName) {
+                this.currentTool = toolName;
+                switch (this.currentTool) {
+                    case "pen":
+                        this.canvasContext.fillStyle = "black";
+                        break;
+                    case "eraser":
+                        this.canvasContext.fillStyle = "white";
+                        break;
+                    case "mirror_pen":
+                        this.canvasContext.fillStyle = "grey";
+                        break;
+                    case "bucket":
+                        this.canvasContext.fillStyle = "blue";
+                        break;
+                    default:
+                        this.canvasContext.fillStyle = "black";
+                }
+                this.updateToolDisplay();
+            }
+
+            updateToolDisplay() {
+                const label = document.getElementById("currentTool");
+                label.textContent = this.currentTool;
+            }
+        }
+
+        // Mouse Object
+        class Mouse {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.mouseShadow = document.createElement("div");
+                this.mouseShadow.setAttribute("class", "shadowMarker");
+                this.canvas.canvas.parentElement.appendChild(this.mouseShadow);
+                this.isMouseDown = false;
+            }
+
+            updateShadowPosition(px, py) {
+                let percentX = (px / 16) * 100;
+                let percentY = (py / 16) * 100;
+
+                percentX = Math.max(0, Math.min(percentX, 93.75));
+                percentY = Math.max(0, Math.min(percentY, 93.75));
+
+                this.mouseShadow.style.left = `${percentX}%`;
+                this.mouseShadow.style.top = `${percentY}%`;
+            }
+
+            mouseDown() {
+                this.isMouseDown = true;
+            }
+
+            mouseUp() {
+                this.isMouseDown = false;
+            }
+
+            mouseMove(event) {
+                const mPos = this.getMousePos(event);
+                const tpx = Math.floor(mPos.x / this.canvas.blockSize);
+                const tpy = Math.floor(mPos.y / this.canvas.blockSize);
+                this.updateShadowPosition(tpx, tpy);
+            }
+
+            getMousePos(event) {
+                const rect = this.canvas.canvas.getBoundingClientRect();
+                return {
+                    x: event.clientX - rect.left,
+                    y: event.clientY - rect.top
+                };
+            }
+        }
+
+        // Global Instances
+        const canvas = new Canvas("myCanvas", "miniCanvas");
+        const tool = new Tool();
+        const mouse = new Mouse(canvas);
+
+        tool.setTool("pen");
+
+        // Event Listeners for Mouse
+        canvas.canvas.addEventListener("mousedown", () => mouse.mouseDown());
+        canvas.canvas.addEventListener("mouseup", () => mouse.mouseUp());
+        canvas.canvas.addEventListener("mousemove", (event) => mouse.mouseMove(event));
+
+        // Tool Selection
+        document.querySelector('button[onclick="setTool(\'pen\')"]').addEventListener("click", () => tool.setTool("pen"));
+        document.querySelector('button[onclick="setTool(\'eraser\')"]').addEventListener("click", () => tool.setTool("eraser"));
+        document.querySelector('button[onclick="setTool(\'mirror_pen\')"]').addEventListener("click", () => tool.setTool("mirror_pen"));
+        document.querySelector('button[onclick="setTool(\'bucket\')"]').addEventListener("click", () => tool.setTool("bucket"));
+
+        // Handle New Canvas, Save, and Load
+        function newCanvas() {
+            if (confirm("Changes can't be recovered. Do you really want a new canvas?")) {
+                canvas.clearCanvas();
+            }
+        }
+
+        function saveAsImage() {
+            canvas.updateMiniCanvas();
+            const image = canvas.miniCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+            const link = document.createElement('a');
+            link.download = `${document.getElementById("imgname").value}.png`;
+            link.href = image;
+            link.click();
+        }
+
+        function updateMiniCanvas() {
+            canvas.updateMiniCanvas();
+        }
+
+        function openCanvas() {
+            // Implement open canvas logic if needed
+        }
+
+        function navigateLeft() {
+            // Implement left navigation logic if needed
+        }
+
+        function navigateRight() {
+            // Implement right navigation logic if needed
+        }
+
+    </script>
+</body>
 </html>
